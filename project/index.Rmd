@@ -1,0 +1,77 @@
+---
+title       : Quick and dirty rates analysis
+subtitle    : Mobile Compliance 2
+author      : Phil Allen
+job         : Kainos
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : standalone # {standalone, draft, selfcontained}
+knit        : slidify::knit2slides
+---
+
+```{r,R.options=options(xtable.type = 'html')}
+
+```
+
+
+```{r, warning=FALSE,message=FALSE,results='hide', echo=FALSE}
+library(dplyr)
+library(lubridate)
+library(spatstat)
+```
+
+```{r, echo=FALSE, cache=TRUE}
+encs <- read.csv(file="../data/encounters.csv", header=TRUE, stringsAsFactors=FALSE)
+encs <- group_by(encs, date_hour) %>%
+  summarise(count=sum(count)) %>%
+  mutate(hour=as.integer(substr(date_hour,12,13)), date=ymd(substr(date_hour,1,10)))
+```
+
+## Quick look at times of day
+
+```{r, fig.height=5, echo=FALSE}
+enc_means <- group_by(encs, hour) %>% summarise(count=mean(count))
+with(enc_means, plot(hour, count))
+title("Mean encounters at hours of day")
+```
+
+- Concentrate on hours 10 and 11
+- Treat both as if same distribution
+
+```{r, cache=TRUE,echo=FALSE}
+encs_10_11 <- (filter(encs, 10 <= hour & hour <= 11))$count
+```
+
+---
+
+## Look at distribution
+
+```{r, echo=FALSE, fig.height=5}
+hist(encs_10_11, main="Histogram of encounters during hours 10 and 11")
+```
+
+- Bimodal, so simple Poisson process not a good fit
+
+---
+
+## Try kernel density fit
+
+```{r, cache=TRUE, echo=FALSE, fig.height=3}
+d <- density(encs_10_11)
+plot(d, main="Fitted kernel density distribution", xlab = "Encounters")
+```
+
+- Find fitted quantiles and quickly check robustness against data
+
+```{r, cache=TRUE, echo=FALSE, results='asis'}
+probs <- c(0.9, 0.99, 0.999, 0.9999)
+est_qs <- quantile(d, probs = probs)
+l <- length(encs_10_11)
+obs_probs <- sapply(est_qs, function(q) { sum(encs_10_11 < q) / l})
+xtable(data.frame(est_quantiles=est_qs, observed_probs=obs_probs), digits = c(0,0,4))
+```
+
+- So take `r round(est_qs[4],0)` as 99.99% worst hour
+
