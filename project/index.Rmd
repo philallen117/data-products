@@ -1,8 +1,7 @@
 ---
-title       : Quick and dirty rates analysis
-subtitle    : Mobile Compliance 2
+title       : Power to the People
+subtitle    : An friendly tool for power calculations
 author      : Phil Allen
-job         : Kainos
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
@@ -11,67 +10,53 @@ mode        : standalone # {standalone, draft, selfcontained}
 knit        : slidify::knit2slides
 ---
 
-```{r,R.options=options(xtable.type = 'html')}
-
-```
-
-
 ```{r, warning=FALSE,message=FALSE,results='hide', echo=FALSE}
 library(dplyr)
 library(lubridate)
 library(spatstat)
+library(ggplot2)
 ```
 
-```{r, echo=FALSE, cache=TRUE}
-encs <- read.csv(file="../data/encounters.csv", header=TRUE, stringsAsFactors=FALSE)
-encs <- group_by(encs, date_hour) %>%
-  summarise(count=sum(count)) %>%
-  mutate(hour=as.integer(substr(date_hour,12,13)), date=ymd(substr(date_hour,1,10)))
-```
+## Power is hard
 
-## Quick look at times of day
-
-```{r, fig.height=5, echo=FALSE}
-enc_means <- group_by(encs, hour) %>% summarise(count=mean(count))
-with(enc_means, plot(hour, count))
-title("Mean encounters at hours of day")
-```
-
-- Concentrate on hours 10 and 11
-- Treat both as if same distribution
-
-```{r, cache=TRUE,echo=FALSE}
-encs_10_11 <- (filter(encs, 10 <= hour & hour <= 11))$count
-```
+* Often, study designers hoping to see an effect
+* Thinking about _not_ finding it is unntuitive
+* Can lead to wasted studies
 
 ---
 
-## Look at distribution
+## Make it easier
 
-```{r, echo=FALSE, fig.height=5}
-hist(encs_10_11, main="Histogram of encounters during hours 10 and 11")
-```
-
-- Bimodal, so simple Poisson process not a good fit
+* Concentrate on key use cases:
+  + Find effect size at acceptable power
+  + Find group size you need
+* Provide a visualisation
 
 ---
 
-## Try kernel density fit
+## Simple visualisation
 
-```{r, cache=TRUE, echo=FALSE, fig.height=3}
-d <- density(encs_10_11)
-plot(d, main="Fitted kernel density distribution", xlab = "Encounters")
+* Thanks to Brian Caffo 
+* Visualisation actually shows Z-test, but results from power.t.test
+* Effect size (x-axis) 0.5, and group size 20
+
+```{r simplevis, echo=FALSE, message=FALSE, fig.height=4}
+pow_plot <- function(effect_size, n, alpha){
+  g = ggplot(data.frame(effect_size = c(-2, 3)), aes(x = effect_size))
+  g = g + stat_function(fun=dnorm, geom = "line", 
+                        args = list(mean = 0, sd = 1 / sqrt(n)), 
+                        size = 2, col = "red")
+  g = g + stat_function(fun=dnorm, geom = "line", 
+                        args = list(mean = effect_size, sd = 1 / sqrt(n)), 
+                        size = 2, col = "blue")
+  xitc = qnorm(1 - alpha) / sqrt(n)
+  g = g + geom_vline(xintercept=xitc, size = 1)
+  # p <- pnorm(xitc, mean = effect_size, sd = 1 / sqrt(n), lower.tail = FALSE)
+  p <- power.t.test(n=n, delta=effect_size, sd=1, type="one.sample", alt="one.sided")$power
+  g <- g + ggtitle(paste0("power: ", round(p,3))) + xlab("Effect size")
+  g
+}
+pow_plot(0.5,20,0.05)
 ```
 
-- Find fitted quantiles and quickly check robustness against data
-
-```{r, cache=TRUE, echo=FALSE, results='asis'}
-probs <- c(0.9, 0.99, 0.999, 0.9999)
-est_qs <- quantile(d, probs = probs)
-l <- length(encs_10_11)
-obs_probs <- sapply(est_qs, function(q) { sum(encs_10_11 < q) / l})
-xtable(data.frame(est_quantiles=est_qs, observed_probs=obs_probs), digits = c(0,0,4))
-```
-
-- So take `r round(est_qs[4],0)` as 99.99% worst hour
 
