@@ -30,6 +30,7 @@ source("pres.R")
   + Find the group size you need to achieve a given power supposing an effect size
   + Find the effect size you can detect at a given power with a given group size
   + Find the power you have supposing an effect size for a given group size 
+* Present delta as _effect size_ so that interface is unit-free
 * Provide a visualisation alongside the calculation
 
 ---
@@ -37,6 +38,8 @@ source("pres.R")
 ## Simple visualisation
 
 * Thanks to Brian Caffo 
+  ++ Null hypothesis curve in <span style="color: red;">red</span>
+  ++ Alternative hypothesis curve in <span style="color: blue;">blue</span>
 * Visualisation actually shows Z-test, but calculate results from power.t.test
 * Effect size (x-axis) 0.5, and group size 20, with alpha 0.05
 
@@ -48,15 +51,16 @@ pow_plot(effect_size=0.5, n=20, alpha=0.05, objective="Power")
 
 ## How it looks
 
-Try it at [shinyapps.io](http://www.bbc.co.uk)
+Try it at [shinyapps.io](https://philallen117.shinyapps.io/coursera-data-products/)
 
 <img alt="Screen shot of power calculator" src="screenshot.jpg" style="max-width: 90%;">
 
 ---
 
-## Enhancments backlog
+## Enhancements backlog
 
-* Other forms of test besides 1-sided, 1-sample
-* Conditional reveal of input controls depending on objective
+* Conditional hiding of input controls depending on objective
+ ++ Using customer HTML
+* Support other forms of test besides 1-sided, 1-sample
 * Turn alpha, power inputs into percentages
 
