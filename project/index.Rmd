@@ -1,48 +1,62 @@
 ---
 title       : Power to the People
-subtitle    : An friendly tool for power calculations
+subtitle    : A friendly tool for power calculations
 author      : Phil Allen
+css         : style.css
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
 widgets     : []            # {mathjax, quiz, bootstrap}
-mode        : standalone # {standalone, draft, selfcontained}
+mode        : selfcontained # {standalone, draft, selfcontained}
 knit        : slidify::knit2slides
 ---
 
 ```{r, warning=FALSE,message=FALSE,results='hide', echo=FALSE}
-library(dplyr)
-library(lubridate)
-library(spatstat)
-library(ggplot2)
+source("pres.R")
 ```
 
 ## Power is hard
 
-* Often, study designers hoping to see an effect
+* Often, study designers hope to see an effect
 * Thinking about _not_ finding it is unntuitive
 * Can lead to wasted studies
+* Usually, people need to work backwards from a conventional power (80%)
 
 ---
 
 ## Make it easier
 
-* Concentrate on key use cases:
-  + Find effect size at acceptable power
-  + Find group size you need
-* Provide a visualisation
+* Concentrate on key use cases ("objectives"):
+  + Find the group size you need to achieve a given power supposing an effect size
+  + Find the effect size you can detect at a given power with a given group size
+  + Find the power you have supposing an effect size for a given group size 
+* Provide a visualisation alongside the calculation
 
 ---
 
 ## Simple visualisation
 
 * Thanks to Brian Caffo 
-* Visualisation actually shows Z-test, but results from power.t.test
+* Visualisation actually shows Z-test, but calculate results from power.t.test
 * Effect size (x-axis) 0.5, and group size 20, with alpha 0.05
 
-```{r simplevis, echo=FALSE, message=FALSE, fig.height=4}
-source("pres.R")
+```{r simplevis, echo=FALSE, fig.height=5, fig.width=8, fig.align='center'}
 pow_plot(effect_size=0.5, n=20, alpha=0.05, objective="Power")
 ```
 
+--- img.max-width: 90%
+
+## How it looks
+
+Try it at [shinyapps.io](http://www.bbc.co.uk)
+
+<img alt="Screen shot of power calculator" src="screenshot.jpg" style="max-width: 90%;">
+
+---
+
+## Enhancments backlog
+
+* Other forms of test besides 1-sided, 1-sample
+* Conditional reveal of input controls depending on objective
+* Turn alpha, power inputs into percentages
 
