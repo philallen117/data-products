@@ -8,19 +8,18 @@
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/default.css" media="all" >
-  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/phone.css" 
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
     media="only screen and (max-device-width: 480px)" >
-  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/css/slidify.css" >
-  <link rel="stylesheet" href="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
-
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
   
   <!-- Grab CDN jQuery, fall back to local if offline -->
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
-  <script>window.jQuery || document.write('<script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
-  <script data-main="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/slides" 
-    src="http://slidifylibraries2.googlecode.com/git/inst/libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
   </script>
   
   
@@ -33,7 +32,7 @@
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
     <h1>Power to the People</h1>
-    <h2>An friendly tool for power calculations</h2>
+    <h2>A friendly tool for power calculations</h2>
     <p>Phil Allen<br/></p>
   </hgroup>
   <article></article>  
@@ -47,9 +46,10 @@
   </hgroup>
   <article data-timings="">
     <ul>
-<li>Often, study designers hoping to see an effect</li>
+<li>Often, study designers hope to see an effect</li>
 <li>Thinking about <em>not</em> finding it is unntuitive</li>
 <li>Can lead to wasted studies</li>
+<li>Usually, people need to work backwards from a conventional power (80%)</li>
 </ul>
 
   </article>
@@ -62,13 +62,14 @@
   </hgroup>
   <article data-timings="">
     <ul>
-<li>Concentrate on key use cases:
+<li>Concentrate on key use cases (&quot;objectives&quot;):
 
 <ul>
-<li>Find effect size at acceptable power</li>
-<li>Find group size you need</li>
+<li>Find the group size you need to achieve a given power supposing an effect size</li>
+<li>Find the effect size you can detect at a given power with a given group size</li>
+<li>Find the power you have supposing an effect size for a given group size </li>
 </ul></li>
-<li>Provide a visualisation</li>
+<li>Provide a visualisation alongside the calculation</li>
 </ul>
 
   </article>
@@ -82,11 +83,39 @@
   <article data-timings="">
     <ul>
 <li>Thanks to Brian Caffo </li>
-<li>Visualisation actually shows Z-test, but results from power.t.test</li>
+<li>Visualisation actually shows Z-test, but calculate results from power.t.test</li>
 <li>Effect size (x-axis) 0.5, and group size 20, with alpha 0.05</li>
 </ul>
 
-<p><img src="data:image/png;base64,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" alt="plot of chunk simplevis"></p>
+<p><img src="assets/fig/simplevis-1.png" title="plot of chunk simplevis" alt="plot of chunk simplevis" style="display: block; margin: auto;" /></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>How it looks</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Try it at <a href="http://www.bbc.co.uk">shinyapps.io</a></p>
+
+<p><img alt="Screen shot of power calculator" src="screenshot.jpg" style="max-width: 90%;"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Enhancments backlog</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Other forms of test besides 1-sided, 1-sample</li>
+<li>Conditional reveal of input controls depending on objective</li>
+<li>Turn alpha, power inputs into percentages</li>
+</ul>
 
   </article>
   <!-- Presenter Notes -->
@@ -114,6 +143,18 @@
          3
       </a>
     </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='How it looks'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Enhancments backlog'>
+         5
+      </a>
+    </li>
   </ul>
   </div>  <!--[if IE]>
     <script 
@@ -125,7 +166,7 @@
   <!-- Load Javascripts for Widgets -->
   
   <!-- LOAD HIGHLIGHTER JS FILES -->
-  <script src="http://slidifylibraries2.googlecode.com/git/inst/libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
   <!-- DONE LOADING HIGHLIGHTER JS FILES -->
    
