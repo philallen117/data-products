@@ -38,25 +38,11 @@ library(ggplot2)
 
 * Thanks to Brian Caffo 
 * Visualisation actually shows Z-test, but results from power.t.test
-* Effect size (x-axis) 0.5, and group size 20
+* Effect size (x-axis) 0.5, and group size 20, with alpha 0.05
 
 ```{r simplevis, echo=FALSE, message=FALSE, fig.height=4}
-pow_plot <- function(effect_size, n, alpha){
-  g = ggplot(data.frame(effect_size = c(-2, 3)), aes(x = effect_size))
-  g = g + stat_function(fun=dnorm, geom = "line", 
-                        args = list(mean = 0, sd = 1 / sqrt(n)), 
-                        size = 2, col = "red")
-  g = g + stat_function(fun=dnorm, geom = "line", 
-                        args = list(mean = effect_size, sd = 1 / sqrt(n)), 
-                        size = 2, col = "blue")
-  xitc = qnorm(1 - alpha) / sqrt(n)
-  g = g + geom_vline(xintercept=xitc, size = 1)
-  # p <- pnorm(xitc, mean = effect_size, sd = 1 / sqrt(n), lower.tail = FALSE)
-  p <- power.t.test(n=n, delta=effect_size, sd=1, type="one.sample", alt="one.sided")$power
-  g <- g + ggtitle(paste0("power: ", round(p,3))) + xlab("Effect size")
-  g
-}
-pow_plot(0.5,20,0.05)
+source("pres.R")
+pow_plot(effect_size=0.5, n=20, alpha=0.05, objective="Power")
 ```
 
 
